@@ -903,7 +903,7 @@ void printHelper(char instr[]) {
     printf("CCs: N = %d  Z = %d  P = %d\n", NEXT_LATCHES.N, NEXT_LATCHES.Z, NEXT_LATCHES.P);
     printf("Registers:\n");
     for (int k = 0; k < LC_3b_REGS; k++)
-        printf("%d: 0x%.4x\n", k, CURRENT_LATCHES.REGS[k]);
+        printf("%d: 0x%.4x\n", k, NEXT_LATCHES.REGS[k]);
     printf("\n");
     printf("\n");
     printf("\n");
