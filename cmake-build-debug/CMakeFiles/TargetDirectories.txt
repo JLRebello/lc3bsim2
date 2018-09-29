@@ -1,0 +1,3 @@
+C:/Users/clara/Desktop/lc3bsim2/cmake-build-debug/CMakeFiles/lc3bsim2.dir
+C:/Users/clara/Desktop/lc3bsim2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/clara/Desktop/lc3bsim2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

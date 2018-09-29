@@ -417,7 +417,9 @@ void XOR(int num);
 //HELPER FUNCTIONS
 void setBitArray(int num);
 int powpow(int a, int b);
-int realValue(int endBit, int startBit);
+int regValue(int endBit, int startBit);
+int signedValue(int endBit, int startBit);
+void printHelper(char instr[]);
 
 //bitArray Global Variable
 int bitArray[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -433,65 +435,53 @@ void process_instruction(){
      *       -Update NEXT_LATCHES
      */
 
-    char str[7] = {0, 0, 0, 0, 0, 0, 0};    //this will be 6 characters + NULL terminator
 
-    FILE *fptr;
-    fptr = fopen("isaprogram.obj", "r");
-    if (fptr == NULL) {
-        printf("ERROR READING FILE 1\n");
-    }
-//the first thing it reads is the .ORIG address. It's already in CURRENT_LATCHES. so I don't think we need it anymore
-    fscanf(fptr, "%s", str);
 
-    while(CURRENT_LATCHES.PC != 0) {
         //FETCH the instruction
-        fscanf(fptr, "%s", str);    //<--This, presumably, is the first instruction
-        int num = (int) strtol(str + 2, NULL, 16);
+        int littleInstr = MEMORY[(CURRENT_LATCHES.PC)/2][0];
+        int bigInstr = (MEMORY[(CURRENT_LATCHES.PC)/2][1]) << 8;
+        int instr = bigInstr + littleInstr;
 
         //DECODE the instruction, then EXECUTE it using the OPCODE functions
-        if (str[2] == '1') {              //if ADD
-            ADD(num);
+        if ((instr || 0x1000) == 0x1000) {              //if ADD
+            ADD(instr);
 
-        } else if (str[2] == '5') {       //if AND
-            AND(num);
+        } else if ((instr || 0x5000) == 0x5000) {       //if AND
+            AND(instr);
 
-        } else if (str[2] == '0') {       //if BR
-            BR(num);
+        } else if ((instr || 0x9000) == 0x9000) {       //if XOR/NOT
+            XOR(instr);
 
-        } else if (str[2] == 'C') {       //if JMP/RET
-            JMP(num);
+        } else if ((instr || 0xC000) == 0xC000) {       //if JMP/RET
+            JMP(instr);
 
-        } else if (str[2] == '4') {       //if JSR/RR
-            JSR(num);
+        } else if ((instr || 0x4000) == 0x4000) {       //if JSR/RR
+            JSR(instr);
 
-        } else if (str[2] == '2') {       //if LDB
-            LDB(num);
+        } else if ((instr || 0x2000) == 0x2000) {       //if LDB
+            LDB(instr);
 
-        } else if (str[2] == '6') {       //if LDW
-            LDW(num);
+        } else if ((instr || 0x6000) == 0x6000) {       //if LDW
+            LDW(instr);
 
-        } else if (str[2] == 'E') {       //if LEA
-            LEA(num);
+        } else if ((instr || 0xE000) == 0xE000) {       //if LEA
+            LEA(instr);
 
-        } else if (str[2] == 'D') {       //if SHF
-            SHF(num);
+        } else if ((instr || 0xD000) == 0xD000) {       //if SHF
+            SHF(instr);
 
-        } else if (str[2] == '3') {       //if STB
-            STB(num);
+        } else if ((instr || 0x3000) == 0x3000) {       //if STB
+            STB(instr);
 
-        } else if (str[2] == '7') {       //if STW
-            STW(num);
+        } else if ((instr || 0x7000) == 0x7000) {       //if STW
+            STW(instr);
 
-        } else if (str[2] == 'F') {       //if TRAP/HALT
-            TRAP(num);
+        } else if ((instr || 0xF000) == 0xF000) {       //if TRAP/HALT
+            TRAP(instr);
 
-        } else if (str[2] == '9') {       //if XOR/NOT
-            XOR(num);
-
+        } else {       //if BR
+            BR(instr);
         }
-
-    }
-
 }
 
 //***********************************************************************************************************************************
@@ -499,24 +489,24 @@ void process_instruction(){
 //***********************************************************************************************************************************
 void ADD(int num){
     setBitArray(num);
-    int DR = realValue(11,9);                       //this is the destination register
-    int SR1 = realValue(8,6);                       //this is the first source register
+    int DR = regValue(11,9);                       //this is the destination register
+    int SR1 = regValue(8,6);                       //this is the first source register
 
     //Update PC
-    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;       //update PC
+    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;
 
     //Execute the ADD
     if(bitArray[5]==0){                             //second source register mode
-        int SR2 = realValue(2,0);
+        int SR2 = regValue(2,0);
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] + CURRENT_LATCHES.REGS[SR2]);
     }
     else{                                           //immediate operand mode
-        int imm5 = realValue(4,0);
+        int imm5 = signedValue(4,0);
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] + imm5);
     }
 
     //Set the CCs
-    if(NEXT_LATCHES.REGS[DR] == 0){                 //set condition codes
+    if(NEXT_LATCHES.REGS[DR] == 0){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
@@ -532,28 +522,30 @@ void ADD(int num){
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
     }
+
+    printHelper("ADD");
 }
 
 void AND(int num){
     setBitArray(num);
-    int DR = realValue(11,9);                       //this is the destination register
-    int SR1 = realValue(8,6);                       //this is the first source register
+    int DR = regValue(11,9);                       //this is the destination register
+    int SR1 = regValue(8,6);                       //this is the first source register
 
     //Update PC
-    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;       //update PC
+    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;
 
     //Execute the AND
     if(bitArray[5]==0){                             //second source register mode
-        int SR2 = realValue(2,0);
+        int SR2 = regValue(2,0);
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] & CURRENT_LATCHES.REGS[SR2]);
     }
     else{                                           //immediate operand mode
-        int imm5 = realValue(4,0);
+        int imm5 = signedValue(4,0);
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] & imm5);
     }
 
     //Set the CCs
-    if(NEXT_LATCHES.REGS[DR] == 0){                 //set condition codes
+    if(NEXT_LATCHES.REGS[DR] == 0){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
@@ -569,83 +561,49 @@ void AND(int num){
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
     }
+
+    printHelper("AND");
 }
 
 
 void BR(int num){
     setBitArray(num);
-    int cc = realValue(11,9);
-    int offset = realValue(8,0);
-    offset *= 2;                                //this is the left shift
-    if((cc == 0) || (cc == 7)){                 //if unconditional BR (BR or BRnzp)
-        NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
-    }
-    else if (cc == 1){                          //if BRp
-        if(CURRENT_LATCHES.P == 1){
-            NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
-        }
-    }
-    else if (cc == 2){                          //if BRz
-        if(CURRENT_LATCHES.Z == 1){
-            NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
-        }
-    }
-    else if (cc == 3){                          //if BRzp
-        if((CURRENT_LATCHES.Z == 1) || (CURRENT_LATCHES.P == 1)){
-            NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
-        }
-    }
-    else if (cc == 4){                          //if BRn
-        if(CURRENT_LATCHES.N == 1){
-            NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
-        }
-    }
-    else if (cc == 5){                          //if BRnp
-        if((CURRENT_LATCHES.N == 1) || (CURRENT_LATCHES.P == 1)){
-            NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
-        }
-    }
-    else if (cc == 6){                          //if BRnz
-        if((CURRENT_LATCHES.N == 1) || (CURRENT_LATCHES.Z == 1)){
-            NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
-        }
+    int offset = signedValue(8,0);
+    offset = offset << 1;
+
+    if((bitArray[11] & CURRENT_LATCHES.N) | (bitArray[10] & CURRENT_LATCHES.Z) | (bitArray[9] & CURRENT_LATCHES.P)) {
+        NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;
     }
 
     NEXT_LATCHES.N = CURRENT_LATCHES.N;         //update condition codes --no change from current
     NEXT_LATCHES.Z = CURRENT_LATCHES.Z;
     NEXT_LATCHES.P = CURRENT_LATCHES.P;
 
-    //TODO:
-    /*Could also maybe do the branching like:
-     * if((realValue(11) && CURRENT_LATCHES.N) || (realValue(10) && CURRENT_LATCHES.Z) || (realValue(9) && CURRENT_LATCHES.P)){
-     *      NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;
-     *  }
-     *  Idk if this will actually work properly, but it's how it looks in the BR instruction in Appendix A and if it does work it makes our code nicer :)
-     */
+    printHelper("BRANCH");
 }
 
 void JMP(int num){
     setBitArray(num);
-    int BR = realValue(8,6);                    //this is base register in either case
+    int BR = regValue(8,6);                    //this is base register in either case
     NEXT_LATCHES.PC = CURRENT_LATCHES.REGS[BR];
     NEXT_LATCHES.N = CURRENT_LATCHES.N;         //update condition codes --no change from current
     NEXT_LATCHES.Z = CURRENT_LATCHES.Z;
     NEXT_LATCHES.P = CURRENT_LATCHES.P;
+
+    printHelper("JMP");
 }
 
 void JSR(int num){
     setBitArray(num);
     int TEMP = CURRENT_LATCHES.PC + 2;                  //TEMP gets the incremented PC (to match the Appendix A)
-    //NEXT_LATCHES.REGS[7] = CURRENT_LATCHES.PC + 2;      //save incremented PC in R7
 
-    //TODO: I think this is backwards actually? See if you agree based on Appendix A (actually what they told us to change JSR to in Appendix A)
-    if(bitArray[11]==1){                                //JSR mode
-        int offset = realValue(10,0);
-        offset *= 2;                                    //this is the left shift
-        NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add leftshifted offset to incremented PC
+    if(bitArray[11] == 1){                                //JSR mode
+        int offset = signedValue(10,0);
+        offset = offset << 1;
+        NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;  //add offset to incremented PC
     }
     else{                                               //JSRR mode
-        int BR = realValue(8,6);                        //base register
+        int BR = regValue(8,6);                        //base register
         NEXT_LATCHES.PC = CURRENT_LATCHES.REGS[BR];
     }
 
@@ -654,17 +612,22 @@ void JSR(int num){
     NEXT_LATCHES.N = CURRENT_LATCHES.N;                 //update condition codes --no change from current
     NEXT_LATCHES.Z = CURRENT_LATCHES.Z;
     NEXT_LATCHES.P = CURRENT_LATCHES.P;
+
+    printHelper("JSR");
 }
-//this is what memory looks like
-//#define WORDS_IN_MEM    0x08000
-//int MEMORY[WORDS_IN_MEM][2];
 
 void LDB(int num){
     setBitArray(num);
-    int DR = realValue(11,9);                           //destination register
-    int BR = realValue(8,6);                            //base register
-    int offset = realValue(5,0);                        //offset
-    NEXT_LATCHES.REGS[DR] = MEMORY[BR+offset];          //TODO: IS THIS RIGHT??
+    int DR = regValue(11,9);                           //destination register
+    int BR = regValue(8,6);                            //base register
+    int offset = signedValue(5,0);                        //offset
+    int index = CURRENT_LATCHES.REGS[BR] + offset;
+
+    if((index % 2) == 0) {
+        NEXT_LATCHES.REGS[DR] = Low16bits(MEMORY[index/2][0]);
+    } else {
+        NEXT_LATCHES.REGS[DR] = Low16bits(MEMORY[index/2][1]);
+    }
 
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
     if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
@@ -683,19 +646,23 @@ void LDB(int num){
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
     }
-}
 
-//this is what memory looks like
-//#define WORDS_IN_MEM    0x08000
-//int MEMORY[WORDS_IN_MEM][2];
+    printHelper("LDB");
+}
 
 void LDW(int num){
     setBitArray(num);
-    int DR = realValue(11,9);                           //destination register
-    int BR = realValue(8,6);                            //base register
-    int offset = realValue(5,0);                        //offset
-    offset *= 2;                                        //leftshift offset doubles it
-    NEXT_LATCHES.REGS[DR] = MEMORY[BR+offset];          //TODO: IS THIS RIGHT??
+    int DR = regValue(11,9);                           //destination register
+    int BR = regValue(8,6);                            //base register
+    int offset = signedValue(5,0);                        //offset
+    int TEMPlow, TEMPhigh;
+    offset = offset << 1;
+
+    TEMPlow = MEMORY[(CURRENT_LATCHES.REGS[BR]+offset)/2][0];
+    TEMPhigh = MEMORY[(CURRENT_LATCHES.REGS[BR]+offset)/2][1];
+    TEMPhigh = TEMPhigh << 8;
+
+    NEXT_LATCHES.REGS[DR] = Low16bits(TEMPhigh + TEMPlow);
 
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
     if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
@@ -715,40 +682,148 @@ void LDW(int num){
         NEXT_LATCHES.P = 0;
     }
 
+    printHelper("LDW");
 }
 
 void LEA(int num){
     setBitArray(num);
-    int DR = realValue(11,9);                           //destination register
-    int offset = realValue(8,0);                        //offset
-    offset *= 2;                                        //leftshift offset
-    NEXT_LATCHES.REGS[DR] = CURRENT_LATCHES.PC + 2 + offset;    //execute LEA
+    int DR = regValue(11,9);                           //destination register
+    int offset = signedValue(8,0);                        //offset
 
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
+
+    NEXT_LATCHES.REGS[DR] = CURRENT_LATCHES.PC + 2 + offset;    //execute LEA
+
     NEXT_LATCHES.N = CURRENT_LATCHES.N;                 //update condition codes --no change from current
     NEXT_LATCHES.Z = CURRENT_LATCHES.Z;
     NEXT_LATCHES.P = CURRENT_LATCHES.P;
+
+    printHelper("LEA");
 }
 
 void SHF(int num){
+    setBitArray(num);
+    int DR = regValue(11, 9);
+    int SR = regValue(8, 6);
+    int amount4 = signedValue(3, 0);
 
+    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;
+
+    if(bitArray[4] == 0) {
+        NEXT_LATCHES.REGS[DR] = Low16bits((CURRENT_LATCHES.REGS[SR]) << amount4);
+    } else {
+        if(bitArray[5] == 0) {
+            NEXT_LATCHES.REGS[DR] = Low16bits(((CURRENT_LATCHES.REGS[SR]) >> amount4) & !(0x00008000 >> (amount4 - 1)));
+        } else {
+            NEXT_LATCHES.REGS[DR] = Low16bits((CURRENT_LATCHES.REGS[SR]) >> amount4);
+        }
+    }
+
+    if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
+        NEXT_LATCHES.N = 0;
+        NEXT_LATCHES.Z = 1;
+        NEXT_LATCHES.P = 0;
+    }
+    else if(NEXT_LATCHES.REGS[DR] > 0){
+        NEXT_LATCHES.N = 0;
+        NEXT_LATCHES.Z = 0;
+        NEXT_LATCHES.P = 1;
+
+    }
+    else if(NEXT_LATCHES.REGS[DR] < 0){
+        NEXT_LATCHES.N = 1;
+        NEXT_LATCHES.Z = 0;
+        NEXT_LATCHES.P = 0;
+    }
+
+    printHelper("SHF");
 }
 
 void STB(int num){
+    setBitArray(num);
+    int SR = regValue(11, 9);
+    int BaseR = regValue(8, 6);
+    int offset = signedValue(5, 0);
+    int index = CURRENT_LATCHES.REGS[BaseR] + offset;
 
+    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
+
+    if((index % 2) == 0) {
+        MEMORY[index/2][0] = CURRENT_LATCHES.REGS[SR];
+    } else {
+        MEMORY[index/2][1] = CURRENT_LATCHES.REGS[SR];
+    }
+
+    NEXT_LATCHES.N = CURRENT_LATCHES.N;                 //update condition codes --no change from current
+    NEXT_LATCHES.Z = CURRENT_LATCHES.Z;
+    NEXT_LATCHES.P = CURRENT_LATCHES.P;
+
+    printHelper("STB");
 }
 
 void STW(int num){
+    setBitArray(num);
+    int SR = regValue(11, 9);
+    int BaseR = regValue(8, 6);
+    int offset = signedValue(5, 0);
+    offset = offset << 1;
 
+    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
+
+    MEMORY[(CURRENT_LATCHES.REGS[BaseR]+offset)/2][0] = CURRENT_LATCHES.REGS[SR] & 0xFF;
+    MEMORY[(CURRENT_LATCHES.REGS[BaseR]+offset)/2][1] = (CURRENT_LATCHES.REGS[SR] >> 8) & 0xFF;
+
+    NEXT_LATCHES.N = CURRENT_LATCHES.N;                 //update condition codes --no change from current
+    NEXT_LATCHES.Z = CURRENT_LATCHES.Z;
+    NEXT_LATCHES.P = CURRENT_LATCHES.P;
+
+    printHelper("STW");
 }
 
 void TRAP(int num){             //TRAP AND HALT
-    NEXT_LATCHES.PC = 0;        //this will make shell program halt the simulator
+    int trapVector = regValue(7, 0);
 
+    NEXT_LATCHES.REGS[7] = Low16bits(CURRENT_LATCHES.PC);
+    NEXT_LATCHES.PC = MEMORY[(trapVector << 1)/2][0];
+
+    NEXT_LATCHES.N = CURRENT_LATCHES.N;                 //update condition codes --no change from current
+    NEXT_LATCHES.Z = CURRENT_LATCHES.Z;
+    NEXT_LATCHES.P = CURRENT_LATCHES.P;
+
+    printHelper("TRAP");
 }
 
 void XOR(int num){
+    setBitArray(num);
+    int DR = regValue(11, 9);
+    int SR1 = regValue(8, 6);
 
+    if(bitArray[5] == 0) {
+        int SR2 = regValue(2, 0);
+        NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] ^ CURRENT_LATCHES.REGS[SR2]);
+    } else {
+        int imm5 = signedValue(4, 0);
+        NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] ^ imm5);
+    }
+
+    if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
+        NEXT_LATCHES.N = 0;
+        NEXT_LATCHES.Z = 1;
+        NEXT_LATCHES.P = 0;
+    }
+    else if(NEXT_LATCHES.REGS[DR] > 0){
+        NEXT_LATCHES.N = 0;
+        NEXT_LATCHES.Z = 0;
+        NEXT_LATCHES.P = 1;
+
+    }
+    else if(NEXT_LATCHES.REGS[DR] < 0){
+        NEXT_LATCHES.N = 1;
+        NEXT_LATCHES.Z = 0;
+        NEXT_LATCHES.P = 0;
+    }
+
+    printHelper("XOR");
 }
 
 //***********************************************************************************************************************************
@@ -776,7 +851,7 @@ int powpow(int a, int b){
     return res;
 }
 
-int realValue(int endBit, int startBit){
+int regValue(int endBit, int startBit){
     int range = endBit - startBit;
     int res = 0;
     for(int i = 0; i <= range ; i++){
@@ -785,4 +860,44 @@ int realValue(int endBit, int startBit){
         }
     }
     return res;
+}
+
+int signedValue(int endBit, int startBit) {
+    int range = (endBit -1) - startBit;
+    int res = 0;
+    for(int i = 0; i <= range ; i++) {
+        if (bitArray[(endBit - 1) - i] == 1) {
+            res += powpow(2, range - i);
+        }
+    }
+
+    if(bitArray[endBit] == 1) {
+        res = res * -1;
+    }
+
+    return res;
+}
+
+void printHelper(char instr[]) {
+    printf("INSTRUCTION: %s", instr);
+
+    printf("\nCurrent register/bus values :\n");
+    printf("-------------------------------------\n");
+    printf("PC                : 0x%.4x\n", CURRENT_LATCHES.PC);
+    printf("CCs: N = %d  Z = %d  P = %d\n", CURRENT_LATCHES.N, CURRENT_LATCHES.Z, CURRENT_LATCHES.P);
+    printf("Registers:\n");
+    for (int k = 0; k < LC_3b_REGS; k++)
+        printf("%d: 0x%.4x\n", k, CURRENT_LATCHES.REGS[k]);
+    printf("\n");
+
+    printf("Next register/bus values :\n");
+    printf("-------------------------------------\n");
+    printf("PC                : 0x%.4x\n", NEXT_LATCHES.PC);
+    printf("CCs: N = %d  Z = %d  P = %d\n", NEXT_LATCHES.N, NEXT_LATCHES.Z, NEXT_LATCHES.P);
+    printf("Registers:\n");
+    for (int k = 0; k < LC_3b_REGS; k++)
+        printf("%d: 0x%.4x\n", k, CURRENT_LATCHES.REGS[k]);
+    printf("\n");
+    printf("\n");
+    printf("\n");
 }
