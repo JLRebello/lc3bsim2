@@ -689,6 +689,7 @@ void LEA(int num){
     setBitArray(num);
     int DR = regValue(11,9);                           //destination register
     int offset = signedValue(8,0);                        //offset
+    offset = offset << 1;
 
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
 
