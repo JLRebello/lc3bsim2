@@ -443,43 +443,43 @@ void process_instruction(){
         int instr = bigInstr + littleInstr;
 
         //DECODE the instruction, then EXECUTE it using the OPCODE functions
-        if ((instr || 0x1000) == 0x1000) {              //if ADD
+        if ((instr & 0xF000) == 0x1000) {              //if ADD
             ADD(instr);
 
-        } else if ((instr || 0x5000) == 0x5000) {       //if AND
+        } else if ((instr & 0xF000) == 0x5000) {       //if AND
             AND(instr);
 
-        } else if ((instr || 0x9000) == 0x9000) {       //if XOR/NOT
+        } else if ((instr & 0xF000) == 0x9000) {       //if XOR/NOT
             XOR(instr);
 
-        } else if ((instr || 0xC000) == 0xC000) {       //if JMP/RET
+        } else if ((instr & 0xF000) == 0xC000) {       //if JMP/RET
             JMP(instr);
 
-        } else if ((instr || 0x4000) == 0x4000) {       //if JSR/RR
+        } else if ((instr & 0xF000) == 0x4000) {       //if JSR/RR
             JSR(instr);
 
-        } else if ((instr || 0x2000) == 0x2000) {       //if LDB
+        } else if ((instr & 0xF000) == 0x2000) {       //if LDB
             LDB(instr);
 
-        } else if ((instr || 0x6000) == 0x6000) {       //if LDW
+        } else if ((instr & 0xF000) == 0x6000) {       //if LDW
             LDW(instr);
 
-        } else if ((instr || 0xE000) == 0xE000) {       //if LEA
+        } else if ((instr & 0xF000) == 0xE000) {       //if LEA
             LEA(instr);
 
-        } else if ((instr || 0xD000) == 0xD000) {       //if SHF
+        } else if ((instr & 0xF000) == 0xD000) {       //if SHF
             SHF(instr);
 
-        } else if ((instr || 0x3000) == 0x3000) {       //if STB
+        } else if ((instr & 0xF000) == 0x3000) {       //if STB
             STB(instr);
 
-        } else if ((instr || 0x7000) == 0x7000) {       //if STW
+        } else if ((instr & 0xF000) == 0x7000) {       //if STW
             STW(instr);
 
-        } else if ((instr || 0xF000) == 0xF000) {       //if TRAP/HALT
+        } else if ((instr & 0xF000) == 0xF000) {       //if TRAP/HALT
             TRAP(instr);
 
-        } else {       //if BR
+        } else if ((instr & 0xF000) == 0x0000){       //if BR
             BR(instr);
         }
 }
@@ -863,16 +863,22 @@ int regValue(int endBit, int startBit){
 }
 
 int signedValue(int endBit, int startBit) {
-    int range = (endBit -1) - startBit;
+    int range = (endBit - 1) - startBit;
     int res = 0;
-    for(int i = 0; i <= range ; i++) {
-        if (bitArray[(endBit - 1) - i] == 1) {
-            res += powpow(2, range - i);
-        }
-    }
 
     if(bitArray[endBit] == 1) {
-        res = res * -1;
+        for(int i = 0; i <= range ; i++) {
+            if (bitArray[(endBit - 1) - i] == 0) {
+                res += powpow(2, range - i);
+            }
+        }
+        res *= -1;
+    } else {
+        for(int i = 0; i <= range ; i++) {
+            if (bitArray[(endBit - 1) - i] == 1) {
+                res += powpow(2, range - i);
+            }
+        }
     }
 
     return res;

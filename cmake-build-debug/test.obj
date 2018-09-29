@@ -1,0 +1,25 @@
+	.ORIG x3000
+ 
+	ADD R1, R1, R2
+
+	ADD R3, R4, #4
+
+ Y 	AND R4, R3, R5
+
+	AND R4, R3, #5
+
+	BR Y
+
+	JMP R0
+
+	JSR Y
+
+	LEA R3, Y
+
+	JSRR R3
+
+	LDB R2, R3, #0
+
+	LDW R7, R6, #2
+
+	.END
