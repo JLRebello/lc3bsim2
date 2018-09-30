@@ -420,10 +420,15 @@ int powpow(int a, int b);
 int regValue(int endBit, int startBit);
 int signedValue(int endBit, int startBit);
 void printHelper(char instr[]);
+void setBitArrayShift(int num);
+void shift(int amount4, int MSB);
+int signedValueShift(void);
 
 //bitArray Global Variable
 int bitArray[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 //                  15  14 13 12 11 10 9  8  7  6  5  4  3  2  1  0
+
+int shiftArray[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 void process_instruction(){
     /*  function: process_instruction
@@ -709,6 +714,7 @@ void SHF(int num){
     int DR = regValue(11, 9);
     int SR = regValue(8, 6);
     int amount4 = signedValue(3, 0);
+    setBitArrayShift(CURRENT_LATCHES.REGS[SR]);
 
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;
 
@@ -716,9 +722,11 @@ void SHF(int num){
         NEXT_LATCHES.REGS[DR] = Low16bits((CURRENT_LATCHES.REGS[SR]) << amount4);
     } else {
         if(bitArray[5] == 0) {
-            NEXT_LATCHES.REGS[DR] = Low16bits(((CURRENT_LATCHES.REGS[SR]) >> amount4) & !(0x00008000 >> (amount4 - 1)));
+            shift(amount4, 0);
+            NEXT_LATCHES.REGS[DR] = Low16bits(signedValueShift());
         } else {
-            NEXT_LATCHES.REGS[DR] = Low16bits((CURRENT_LATCHES.REGS[SR]) >> amount4);
+            shift(amount4, shiftArray[7]);
+            NEXT_LATCHES.REGS[DR] = Low16bits(signedValueShift());
         }
     }
 
@@ -912,4 +920,49 @@ void printHelper(char instr[]) {
     printf("\n");
     printf("\n");
     printf("\n");
+}
+
+void setBitArrayShift(int num){
+    for(int j = 7; j >= 0; j--){
+        if(num >= powpow(2,j)){
+            shiftArray[j] = 1;
+            num -= powpow(2,j);
+        }
+        else{
+            shiftArray[j] = 0;
+        }
+    }
+}
+
+void shift(int amount4, int MSB) {
+    for(int i = amount4, j = 0; i < 8; i++, j++){
+        shiftArray[j] = shiftArray[i];
+    }
+
+    for(int i = (8 - amount4); i < 8; i++){
+        shiftArray[i] = MSB;
+    }
+}
+
+int signedValueShift(void) {
+    int range = (8 - 1) - 0;
+    int res = 0;
+
+    if(shiftArray[8] == 1) {
+        for(int i = 0; i <= range ; i++) {
+            if (shiftArray[(8 - 1) - i] == 0) {
+                res += powpow(2, range - i);
+            }
+        }
+        res += 1;
+        res *= -1;
+    } else {
+        for(int i = 0; i <= range ; i++) {
+            if (shiftArray[(8 - 1) - i] == 1) {
+                res += powpow(2, range - i);
+            }
+        }
+    }
+
+    return res;
 }
