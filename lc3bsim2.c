@@ -506,18 +506,18 @@ void ADD(int num){
     }
 
     //Set the CCs
-    if(NEXT_LATCHES.REGS[DR] == 0){
+    if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if(NEXT_LATCHES.REGS[DR] > 0){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if(NEXT_LATCHES.REGS[DR] < 0){
+    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -545,18 +545,18 @@ void AND(int num){
     }
 
     //Set the CCs
-    if(NEXT_LATCHES.REGS[DR] == 0){
+    if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if(NEXT_LATCHES.REGS[DR] > 0){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if(NEXT_LATCHES.REGS[DR] < 0){
+    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -573,6 +573,8 @@ void BR(int num){
 
     if((bitArray[11] & CURRENT_LATCHES.N) | (bitArray[10] & CURRENT_LATCHES.Z) | (bitArray[9] & CURRENT_LATCHES.P)) {
         NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2 + offset;
+    } else {
+        NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;
     }
 
     NEXT_LATCHES.N = CURRENT_LATCHES.N;         //update condition codes --no change from current
@@ -635,13 +637,13 @@ void LDB(int num){
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if(NEXT_LATCHES.REGS[DR] > 0){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if(NEXT_LATCHES.REGS[DR] < 0){
+    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -670,13 +672,13 @@ void LDW(int num){
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if(NEXT_LATCHES.REGS[DR] > 0){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if(NEXT_LATCHES.REGS[DR] < 0){
+    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -725,13 +727,13 @@ void SHF(int num){
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if(NEXT_LATCHES.REGS[DR] > 0){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if(NEXT_LATCHES.REGS[DR] < 0){
+    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -799,6 +801,8 @@ void XOR(int num){
     int DR = regValue(11, 9);
     int SR1 = regValue(8, 6);
 
+    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;
+
     if(bitArray[5] == 0) {
         int SR2 = regValue(2, 0);
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] ^ CURRENT_LATCHES.REGS[SR2]);
@@ -812,13 +816,13 @@ void XOR(int num){
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if(NEXT_LATCHES.REGS[DR] > 0){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if(NEXT_LATCHES.REGS[DR] < 0){
+    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -873,6 +877,7 @@ int signedValue(int endBit, int startBit) {
                 res += powpow(2, range - i);
             }
         }
+        res += 1;
         res *= -1;
     } else {
         for(int i = 0; i <= range ; i++) {
