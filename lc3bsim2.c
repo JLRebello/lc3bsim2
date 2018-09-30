@@ -1,7 +1,7 @@
 /*
     Name 1: Julia Rebello
     Name 2: Clara Johnson
-    UTEID 1: jlr3755
+    UTEID 1: JLR3755
     UTEID 2: caj2773
 */
 
@@ -437,51 +437,51 @@ void process_instruction(){
 
 
 
-        //FETCH the instruction
-        int littleInstr = MEMORY[(CURRENT_LATCHES.PC)/2][0];
-        int bigInstr = (MEMORY[(CURRENT_LATCHES.PC)/2][1]) << 8;
-        int instr = bigInstr + littleInstr;
+    //FETCH the instruction
+    int littleInstr = MEMORY[(CURRENT_LATCHES.PC)/2][0];
+    int bigInstr = (MEMORY[(CURRENT_LATCHES.PC)/2][1]) << 8;
+    int instr = bigInstr + littleInstr;
 
-        //DECODE the instruction, then EXECUTE it using the OPCODE functions
-        if ((instr & 0xF000) == 0x1000) {              //if ADD
-            ADD(instr);
+    //DECODE the instruction, then EXECUTE it using the OPCODE functions
+    if ((instr & 0xF000) == 0x1000) {              //if ADD
+        ADD(instr);
 
-        } else if ((instr & 0xF000) == 0x5000) {       //if AND
-            AND(instr);
+    } else if ((instr & 0xF000) == 0x5000) {       //if AND
+        AND(instr);
 
-        } else if ((instr & 0xF000) == 0x9000) {       //if XOR/NOT
-            XOR(instr);
+    } else if ((instr & 0xF000) == 0x9000) {       //if XOR/NOT
+        XOR(instr);
 
-        } else if ((instr & 0xF000) == 0xC000) {       //if JMP/RET
-            JMP(instr);
+    } else if ((instr & 0xF000) == 0xC000) {       //if JMP/RET
+        JMP(instr);
 
-        } else if ((instr & 0xF000) == 0x4000) {       //if JSR/RR
-            JSR(instr);
+    } else if ((instr & 0xF000) == 0x4000) {       //if JSR/RR
+        JSR(instr);
 
-        } else if ((instr & 0xF000) == 0x2000) {       //if LDB
-            LDB(instr);
+    } else if ((instr & 0xF000) == 0x2000) {       //if LDB
+        LDB(instr);
 
-        } else if ((instr & 0xF000) == 0x6000) {       //if LDW
-            LDW(instr);
+    } else if ((instr & 0xF000) == 0x6000) {       //if LDW
+        LDW(instr);
 
-        } else if ((instr & 0xF000) == 0xE000) {       //if LEA
-            LEA(instr);
+    } else if ((instr & 0xF000) == 0xE000) {       //if LEA
+        LEA(instr);
 
-        } else if ((instr & 0xF000) == 0xD000) {       //if SHF
-            SHF(instr);
+    } else if ((instr & 0xF000) == 0xD000) {       //if SHF
+        SHF(instr);
 
-        } else if ((instr & 0xF000) == 0x3000) {       //if STB
-            STB(instr);
+    } else if ((instr & 0xF000) == 0x3000) {       //if STB
+        STB(instr);
 
-        } else if ((instr & 0xF000) == 0x7000) {       //if STW
-            STW(instr);
+    } else if ((instr & 0xF000) == 0x7000) {       //if STW
+        STW(instr);
 
-        } else if ((instr & 0xF000) == 0xF000) {       //if TRAP/HALT
-            TRAP(instr);
+    } else if ((instr & 0xF000) == 0xF000) {       //if TRAP/HALT
+        TRAP(instr);
 
-        } else if ((instr & 0xF000) == 0x0000){       //if BR
-            BR(instr);
-        }
+    } else if ((instr & 0xF000) == 0x0000){       //if BR
+        BR(instr);
+    }
 }
 
 //***********************************************************************************************************************************
