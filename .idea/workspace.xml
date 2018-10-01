@@ -13,7 +13,9 @@
   <component name="ChangeListManager">
     <list default="true" id="46570d7c-b9dd-4df0-b441-adc9bfe14349" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/dumpsim" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/dumpsim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/lc3bsim2.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/lc3bsim2.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/objects.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lc3bsim2.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lc3bsim2.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lc3bsim2.c" beforeDir="false" afterPath="$PROJECT_DIR$/lc3bsim2.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -48,13 +50,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="c" value="4368" />
+          <entry key="c" value="4446" />
           <entry key="m" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="ObjectiveC" value="4381" />
+          <entry key="ObjectiveC" value="4459" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -66,8 +68,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lc3bsim2.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="726" column="16" lean-forward="true" selection-start-line="726" selection-start-column="16" selection-end-line="726" selection-end-column="16" />
+            <state relative-caret-position="-6402">
+              <caret line="426" lean-forward="true" selection-start-line="426" selection-end-line="426" />
               <folding>
                 <element signature="e#634#653#0" expanded="true" />
               </folding>
@@ -180,12 +182,12 @@
       <option name="presentableId" value="Default" />
       <updated>1538172620079</updated>
       <workItem from="1538172621443" duration="18531000" />
-      <workItem from="1538338007448" duration="8926000" />
+      <workItem from="1538338007448" duration="9705000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27457000" />
+    <option name="totallyTimeSpent" value="28236000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />
@@ -196,13 +198,13 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.0" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3958641" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.32791728" />
+      <window_info active="true" anchor="bottom" id="Messages" order="8" visible="true" weight="0.32748538" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32894737" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" />
@@ -288,8 +290,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lc3bsim2.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="726" column="16" lean-forward="true" selection-start-line="726" selection-start-column="16" selection-end-line="726" selection-end-column="16" />
+        <state relative-caret-position="-6402">
+          <caret line="426" lean-forward="true" selection-start-line="426" selection-end-line="426" />
           <folding>
             <element signature="e#634#653#0" expanded="true" />
           </folding>
