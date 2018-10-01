@@ -535,11 +535,11 @@ void AND(int num){
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;
 
     //Execute the AND
-    if(bitArray[5]==0){                             //second source register mode
+    if(bitArray[5]==0){                                 //second source register mode
         int SR2 = regValue(2,0);
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] & CURRENT_LATCHES.REGS[SR2]);
     }
-    else{                                           //immediate operand mode
+    else{                                               //immediate operand mode
         int imm5 = signedValue(4,0);
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] & imm5);
     }
@@ -923,11 +923,11 @@ void printHelper(char instr[]) {
 }
 
 void shift(int amount4, int MSB) {
-    for(int i = amount4, j = 0; i < 8; i++, j++){
+    for(int i = amount4, j = 0; i < 16; i++, j++){
         bitArray[j] = bitArray[i];
     }
 
-    for(int i = (8 - amount4); i < 8; i++){
+    for(int i = (8 - amount4); i < 16; i++){
         bitArray[i] = MSB;
     }
 }
