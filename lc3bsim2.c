@@ -511,13 +511,13 @@ void ADD(int num){
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 32768)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
+    else if((NEXT_LATCHES.REGS[DR] >= 32768) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -550,13 +550,13 @@ void AND(int num){
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 32768)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
+    else if((NEXT_LATCHES.REGS[DR] >= 32768) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -632,18 +632,19 @@ void LDB(int num){
     }
 
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
+    //Set the CCs
     if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 32768)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
+    else if((NEXT_LATCHES.REGS[DR] >= 32768) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -667,18 +668,19 @@ void LDW(int num){
     NEXT_LATCHES.REGS[DR] = Low16bits(TEMPhigh + TEMPlow);
 
     NEXT_LATCHES.PC = CURRENT_LATCHES.PC + 2;           //update PC
+    //Set the CCs
     if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 32768)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
+    else if((NEXT_LATCHES.REGS[DR] >= 32768) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -726,18 +728,19 @@ void SHF(int num){
         }
     }
 
+    //Set the CCs
     if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 32768)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
+    else if((NEXT_LATCHES.REGS[DR] >= 32768) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
@@ -815,18 +818,19 @@ void XOR(int num){
         NEXT_LATCHES.REGS[DR] = Low16bits(CURRENT_LATCHES.REGS[SR1] ^ imm5);
     }
 
+    //Set the CCs
     if(NEXT_LATCHES.REGS[DR] == 0){                     //set condition codes
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 1;
         NEXT_LATCHES.P = 0;
     }
-    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 128)){
+    else if((NEXT_LATCHES.REGS[DR] > 0) & (NEXT_LATCHES.REGS[DR] < 32768)){
         NEXT_LATCHES.N = 0;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 1;
 
     }
-    else if((NEXT_LATCHES.REGS[DR] >= 128) | (NEXT_LATCHES.REGS[DR] < 0)){
+    else if((NEXT_LATCHES.REGS[DR] >= 32768) | (NEXT_LATCHES.REGS[DR] < 0)){
         NEXT_LATCHES.N = 1;
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
