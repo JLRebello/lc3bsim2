@@ -927,7 +927,7 @@ void shift(int amount4, int MSB) {
         bitArray[j] = bitArray[i];
     }
 
-    for(int i = (8 - amount4); i < 16; i++){
+    for(int i = (16 - amount4); i < 16; i++){
         bitArray[i] = MSB;
     }
 }

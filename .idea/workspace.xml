@@ -13,9 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="46570d7c-b9dd-4df0-b441-adc9bfe14349" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/lc3bsim2.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/lc3bsim2.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lc3bsim2.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lc3bsim2.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lc3bsim2.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lc3bsim2.c" beforeDir="false" afterPath="$PROJECT_DIR$/lc3bsim2.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -30,10 +27,10 @@
     <session id="-406178066">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="3" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.10" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.open.time.10" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -50,13 +47,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="c" value="4446" />
+          <entry key="c" value="4448" />
           <entry key="m" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="ObjectiveC" value="4459" />
+          <entry key="ObjectiveC" value="4461" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -68,8 +65,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lc3bsim2.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6402">
-              <caret line="426" lean-forward="true" selection-start-line="426" selection-end-line="426" />
+            <state relative-caret-position="-2087">
+              <caret line="778" column="25" lean-forward="true" selection-start-line="778" selection-start-column="25" selection-end-line="778" selection-end-column="25" />
               <folding>
                 <element signature="e#634#653#0" expanded="true" />
               </folding>
@@ -107,7 +104,7 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1905" />
-    <option name="width" value="1948" />
+    <option name="width" value="1950" />
     <option name="height" value="2075" />
   </component>
   <component name="ProjectView">
@@ -115,7 +112,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -132,6 +128,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -161,7 +158,7 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="lc3bsim2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="source.obj" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lc3bsim2" TARGET_NAME="lc3bsim2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lc3bsim2" RUN_TARGET_NAME="lc3bsim2">
+    <configuration name="lc3bsim2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="rshfa.hex" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lc3bsim2" TARGET_NAME="lc3bsim2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lc3bsim2" RUN_TARGET_NAME="lc3bsim2">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -182,29 +179,30 @@
       <option name="presentableId" value="Default" />
       <updated>1538172620079</updated>
       <workItem from="1538172621443" duration="18531000" />
-      <workItem from="1538338007448" duration="9705000" />
+      <workItem from="1538338007448" duration="10298000" />
+      <workItem from="1538357850883" duration="27000" />
+      <workItem from="1538417329699" duration="1982000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28236000" />
+    <option name="totallyTimeSpent" value="30838000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1462106" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15023474" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.0" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3958641" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.12134503" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.15497077" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Messages" order="8" visible="true" weight="0.32748538" />
+      <window_info anchor="bottom" id="Messages" order="8" weight="0.32748538" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32894737" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" />
@@ -244,6 +242,15 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/lc3bsim2.c</url>
+          <line>709</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
         <watch expression="NEXT_LATCHES.REGS" language="ObjectiveC" />
@@ -290,8 +297,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lc3bsim2.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6402">
-          <caret line="426" lean-forward="true" selection-start-line="426" selection-end-line="426" />
+        <state relative-caret-position="-2087">
+          <caret line="778" column="25" lean-forward="true" selection-start-line="778" selection-start-column="25" selection-end-line="778" selection-end-column="25" />
           <folding>
             <element signature="e#634#653#0" expanded="true" />
           </folding>
